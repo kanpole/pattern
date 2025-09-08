@@ -96,7 +96,7 @@ public:
 std::unique_ptr<TextureManager> TextureManager::instance = nullptr;
 
 // 上下文类 - 精灵对象（包含外部状态）
-class Sprite {
+class SpriteEntity {
 private:
     std::shared_ptr<SpriteTexture> texture;  // 享元引用
     
@@ -107,7 +107,7 @@ private:
     float velocityX, velocityY;  // 速度
     
 public:
-    Sprite(const std::string& textureName, float posX = 0, float posY = 0) 
+    SpriteEntity(const std::string& textureName, float posX = 0, float posY = 0) 
         : x(posX), y(posY), scale(1.0f), rotation(0.0f), velocityX(0), velocityY(0) {
         // 从享元工厂获取纹理（享元对象）
         texture = TextureManager::getInstance().getTexture(textureName);
@@ -138,7 +138,7 @@ public:
 // 粒子系统 - 享元模式的典型应用
 class ParticleSystem {
 private:
-    std::vector<std::unique_ptr<Sprite>> particles;
+    std::vector<std::unique_ptr<SpriteEntity>> particles;
     std::string particleTextureName;
     
 public:
@@ -146,7 +146,7 @@ public:
     
     void emitParticle(float x, float y) {
         // 创建新粒子，所有粒子共享同一个纹理享元
-        auto particle = std::make_unique<Sprite>(particleTextureName, x, y);
+        auto particle = std::make_unique<SpriteEntity>(particleTextureName, x, y);
         
         // 设置随机的外部状态
         particle->setVelocity(
@@ -166,7 +166,7 @@ public:
         // 移除超出屏幕的粒子
         particles.erase(
             std::remove_if(particles.begin(), particles.end(),
-                [](const std::unique_ptr<Sprite>& p) {
+                [](const std::unique_ptr<SpriteEntity>& p) {
                     return p->getX() < -100 || p->getX() > 1920 || 
                            p->getY() < -100 || p->getY() > 1080;
                 }),
@@ -246,7 +246,7 @@ private:
     std::unique_ptr<TileMap> tileMap;
     std::unique_ptr<ParticleSystem> fireParticles;
     std::unique_ptr<ParticleSystem> waterParticles;
-    std::vector<std::unique_ptr<Sprite>> enemies;
+    std::vector<std::unique_ptr<SpriteEntity>> enemies;
     
 public:
     GameWorld() {
@@ -260,7 +260,7 @@ public:
         
         // 创建大量敌人，它们共享相同的纹理享元
         for (int i = 0; i < 1000; ++i) {
-            auto enemy = std::make_unique<Sprite>("goblin.png", 
+            auto enemy = std::make_unique<SpriteEntity>("goblin.png", 
                                                  rand() % 3200, rand() % 3200);
             enemy->setVelocity((rand() % 100 - 50) / 10.0f, 
                               (rand() % 100 - 50) / 10.0f);

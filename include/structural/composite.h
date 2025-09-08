@@ -11,32 +11,32 @@
  */
 
 // 组件接口 - 游戏对象基类
-class GameObject {
+class GameObjectComponent {
 protected:
     std::string name;
     float x, y;  // 相对位置
     bool visible;
     
 public:
-    GameObject(const std::string& objectName, float posX = 0, float posY = 0) 
+    GameObjectComponent(const std::string& objectName, float posX = 0, float posY = 0) 
         : name(objectName), x(posX), y(posY), visible(true) {}
     
-    virtual ~GameObject() = default;
+    virtual ~GameObjectComponent() = default;
     
     // 组合模式的核心操作
     virtual void update(float deltaTime) = 0;
     virtual void render(float parentX = 0, float parentY = 0) = 0;
     
     // 组合对象操作（叶子节点可以提供空实现）
-    virtual void addChild(std::shared_ptr<GameObject> child) {
+    virtual void addChild(std::shared_ptr<GameObjectComponent> child) {
         // 默认空实现，叶子节点不支持添加子对象
     }
     
-    virtual void removeChild(std::shared_ptr<GameObject> child) {
+    virtual void removeChild(std::shared_ptr<GameObjectComponent> child) {
         // 默认空实现
     }
     
-    virtual std::shared_ptr<GameObject> getChild(size_t index) {
+    virtual std::shared_ptr<GameObjectComponent> getChild(size_t index) {
         return nullptr;  // 默认返回空
     }
     
@@ -52,15 +52,15 @@ public:
 };
 
 // 叶子节点 - 精灵对象
-class Sprite : public GameObject {
+class SpriteObject : public GameObjectComponent {
 private:
     std::string texture;
     float width, height;
     float rotation;
     
 public:
-    Sprite(const std::string& name, const std::string& textureName, float w = 32, float h = 32)
-        : GameObject(name), texture(textureName), width(w), height(h), rotation(0) {}
+    SpriteObject(const std::string& name, const std::string& textureName, float w = 32, float h = 32)
+        : GameObjectComponent(name), texture(textureName), width(w), height(h), rotation(0) {}
     
     void update(float deltaTime) override {
         // 精灵更新逻辑（动画、物理等）
@@ -83,7 +83,7 @@ public:
 };
 
 // 叶子节点 - 文本对象
-class TextObject : public GameObject {
+class TextObject : public GameObjectComponent {
 private:
     std::string text;
     std::string font;
@@ -91,7 +91,7 @@ private:
     
 public:
     TextObject(const std::string& name, const std::string& content, int size = 16)
-        : GameObject(name), text(content), font("default"), fontSize(size) {}
+        : GameObjectComponent(name), text(content), font("default"), fontSize(size) {}
     
     void update(float deltaTime) override {
         // 文本对象可能有闪烁、滚动等效果
@@ -113,12 +113,12 @@ public:
 };
 
 // 组合节点 - 游戏对象容器
-class GameObjectGroup : public GameObject {
+class GameObjectGroup : public GameObjectComponent {
 private:
-    std::vector<std::shared_ptr<GameObject>> children;
+    std::vector<std::shared_ptr<GameObjectComponent>> children;
     
 public:
-    GameObjectGroup(const std::string& name) : GameObject(name) {}
+    GameObjectGroup(const std::string& name) : GameObjectComponent(name) {}
     
     void update(float deltaTime) override {
         // 更新所有子对象
@@ -140,20 +140,20 @@ public:
     }
     
     // 组合对象特有的操作
-    void addChild(std::shared_ptr<GameObject> child) override {
+    void addChild(std::shared_ptr<GameObjectComponent> child) override {
         if (child) {
             children.push_back(child);
         }
     }
     
-    void removeChild(std::shared_ptr<GameObject> child) override {
+    void removeChild(std::shared_ptr<GameObjectComponent> child) override {
         children.erase(
             std::remove(children.begin(), children.end(), child),
             children.end()
         );
     }
     
-    std::shared_ptr<GameObject> getChild(size_t index) override {
+    std::shared_ptr<GameObjectComponent> getChild(size_t index) override {
         if (index < children.size()) {
             return children[index];
         }
@@ -165,7 +165,7 @@ public:
     }
     
     // 查找子对象
-    std::shared_ptr<GameObject> findChild(const std::string& childName) {
+    std::shared_ptr<GameObjectComponent> findChild(const std::string& childName) {
         for (auto& child : children) {
             if (child->getName() == childName) {
                 return child;
@@ -221,8 +221,8 @@ public:
         
         // 创建玩家对象（组合）
         auto player = std::make_shared<GameObjectGroup>("Player");
-        auto playerSprite = std::make_shared<Sprite>("PlayerSprite", "player.png");
-        auto playerHealthBar = std::make_shared<Sprite>("HealthBar", "health_bar.png");
+        auto playerSprite = std::make_shared<SpriteObject>("PlayerSprite", "player.png");
+        auto playerHealthBar = std::make_shared<SpriteObject>("HealthBar", "health_bar.png");
         
         player->addChild(playerSprite);
         player->addChild(playerHealthBar);
