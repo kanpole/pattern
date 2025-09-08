@@ -1,0 +1,4 @@
+/home/runner/work/pattern/pattern/build/CMakeFiles/patterns.dir
+/home/runner/work/pattern/pattern/build/CMakeFiles/simple_patterns.dir
+/home/runner/work/pattern/pattern/build/CMakeFiles/edit_cache.dir
+/home/runner/work/pattern/pattern/build/CMakeFiles/rebuild_cache.dir
