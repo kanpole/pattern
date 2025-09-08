@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/runner/work/pattern/pattern/include
 
-CXX_FLAGS = -std=gnu++17 -Wall -Wextra -std=c++17
+CXX_FLAGS = -std=gnu++17
 

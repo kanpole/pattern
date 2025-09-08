@@ -11,9 +11,12 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 # 添加可执行文件
 add_executable(patterns main.cpp)
 
+# 添加简化版可执行文件
+add_executable(simple_patterns simple_main.cpp)
+
 # 编译选项
 if(MSVC)
-    target_compile_options(patterns PRIVATE /W4 /utf-8)
+    target_compile_options(simple_patterns PRIVATE /W4 /utf-8)
 else()
-    target_compile_options(patterns PRIVATE -Wall -Wextra -std=c++17)
+    target_compile_options(simple_patterns PRIVATE -Wall -Wextra -std=c++17)
 endif()

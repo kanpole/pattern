@@ -129,6 +129,19 @@ patterns/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/patterns.dir/build.make CMakeFiles/patterns.dir/build
 .PHONY : patterns/fast
 
+#=============================================================================
+# Target rules for targets named simple_patterns
+
+# Build rule for target.
+simple_patterns: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 simple_patterns
+.PHONY : simple_patterns
+
+# fast build rule for target.
+simple_patterns/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_patterns.dir/build.make CMakeFiles/simple_patterns.dir/build
+.PHONY : simple_patterns/fast
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -153,6 +166,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/patterns.dir/build.make CMakeFiles/patterns.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+simple_main.o: simple_main.cpp.o
+.PHONY : simple_main.o
+
+# target to build an object file
+simple_main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_patterns.dir/build.make CMakeFiles/simple_patterns.dir/simple_main.cpp.o
+.PHONY : simple_main.cpp.o
+
+simple_main.i: simple_main.cpp.i
+.PHONY : simple_main.i
+
+# target to preprocess a source file
+simple_main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_patterns.dir/build.make CMakeFiles/simple_patterns.dir/simple_main.cpp.i
+.PHONY : simple_main.cpp.i
+
+simple_main.s: simple_main.cpp.s
+.PHONY : simple_main.s
+
+# target to generate assembly for a file
+simple_main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simple_patterns.dir/build.make CMakeFiles/simple_patterns.dir/simple_main.cpp.s
+.PHONY : simple_main.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -162,9 +199,13 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... patterns"
+	@echo "... simple_patterns"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... simple_main.o"
+	@echo "... simple_main.i"
+	@echo "... simple_main.s"
 .PHONY : help
 
 
